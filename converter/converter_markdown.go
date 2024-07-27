@@ -1,8 +1,6 @@
 package converter
 
 import (
-	"log/slog"
-
 	"github.com/dstotijn/go-notion"
 	"github.com/gomarkdown/markdown/ast"
 	"github.com/gomarkdown/markdown/parser"
@@ -19,30 +17,31 @@ func Convert(s string) ([]notion.Block, error) {
 	doc := p.Parse([]byte(s))
 
 	var blocks []notion.Block
-	ast.WalkFunc(doc, func(node ast.Node, entering bool) ast.WalkStatus {
 
+	ast.WalkFunc(doc, func(node ast.Node, entering bool) ast.WalkStatus {
+		if !entering {
+			return ast.GoToNext
+		}
+
+		// if node.GetChildren() == nil {
+		// 	return ast.Terminate
+		// }
 		if isHeading(node) {
 			block, err := convertHeading(node.(*ast.Heading))
 			if err != nil {
-				slog.Error("error converting heading", "error", err)
 				return ast.Terminate
 			}
 			blocks = append(blocks, block)
-			return ast.GoToNext
+			return ast.SkipChildren
 		}
 
 		if isParagraph(node) {
 			block, err := convertParagraph(node.(*ast.Paragraph))
 			if err != nil {
-				slog.Error("error converting paragraph", "error", err)
 				return ast.Terminate
 			}
 			blocks = append(blocks, block)
-			return ast.GoToNext
-		}
-
-		if node.GetChildren() == nil {
-			return ast.Terminate
+			return ast.SkipChildren
 		}
 
 		return ast.GoToNext

@@ -30,7 +30,11 @@ func TestMarkdownConverter(t *testing.T) {
 	t.Run("can convert markdown with multiple blocks", func(t *testing.T) {
 		markdownText := `# H1 Example
 
-This is a paragraph.`
+## H2 Example
+
+This is a paragraph
+lorem ipsum dolor sit amet.
+`
 
 		expected := []notion.Block{
 			notion.Heading1Block{
@@ -42,22 +46,30 @@ This is a paragraph.`
 					},
 				},
 			},
-			notion.ParagraphBlock{
+			notion.Heading2Block{
 				RichText: []notion.RichText{
 					{
 						Type:      notion.RichTextTypeText,
-						Text:      &notion.Text{Content: "This is a paragraph."},
-						PlainText: "This is a paragraph.",
+						Text:      &notion.Text{Content: "H2 Example"},
+						PlainText: "H2 Example",
+					},
+				},
+			},
+			&notion.ParagraphBlock{
+				RichText: []notion.RichText{
+					{
+						Type:      notion.RichTextTypeText,
+						Text:      &notion.Text{Content: "This is a paragraph\nlorem ipsum dolor sit amet."},
+						PlainText: "This is a paragraph\nlorem ipsum dolor sit amet.",
 					},
 				},
 			},
 		}
 
 		result, err := Convert(markdownText)
-		assert.NoError(t, err)
-		assert.NotNil(t, result)
 
+		assert.NoError(t, err)
 		assert.Equal(t, expected, result)
-		assert.Len(t, result, 2)
 	})
+
 }

@@ -9,12 +9,12 @@ import (
 )
 
 func TestIsHeading(t *testing.T) {
-	t.Run("Heading node", func(t *testing.T) {
+	t.Run("is a heading node", func(t *testing.T) {
 		node := &ast.Heading{}
 		assert.True(t, isHeading(node))
 	})
 
-	t.Run("Not a heading node", func(t *testing.T) {
+	t.Run("not a heading node", func(t *testing.T) {
 		node := &ast.Paragraph{}
 		assert.False(t, isHeading(node))
 	})

@@ -1,6 +1,8 @@
 package converter
 
 import (
+	"fmt"
+
 	"github.com/dstotijn/go-notion"
 	"github.com/gomarkdown/markdown/ast"
 )
@@ -18,17 +20,17 @@ func convertNode(node ast.Node) (notion.Block, error) {
 		return convertHeading(node.(*ast.Heading))
 	}
 
-	if isList(node) {
-		return convertList(node.(*ast.List))
-	}
-
 	if isParagraph(node) {
 		return convertParagraph(node.(*ast.Paragraph))
 	}
 
-	if isLink(node) {
-		return convertLink(node.(*ast.Link))
-	}
+	// if isList(node) {
+	// 	return convertList(node.(*ast.List))
+	// }
 
-	return nil, nil // Ignore unsupported node types
+	// if isLink(node) {
+	// 	return convertLink(node.(*ast.Link))
+	// }
+
+	return nil, fmt.Errorf("unsupported node type: %T", node)
 }
