@@ -14,7 +14,7 @@ A Go package designed to convert Markdown content into Notion Blocks seamlessly.
 
 ## Installation
 
-To install NotionMD, use `go get`:
+To install NotionMD, use `go get`
 
 ```sh
 go get github.com/brittonhayes/notionmd
