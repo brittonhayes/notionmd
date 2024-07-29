@@ -32,17 +32,18 @@ import (
 )
 
 func main() {
-    markdownText := `# H1 Example
+    markdown := `
+# H1 Example
 - Item 1`
 
-    blocks, err := converter.Convert(markdownText)
+    blocks, err := converter.Convert(markdown)
     if err != nil {
         panic(err)
     }
 
     // Use the blocks with your Notion client
-	result, _ := json.MarshalIndent(blocks, "", "  ")
-	fmt.Println(string(m))
+    result, _ := json.MarshalIndent(blocks, "", "  ")
+    fmt.Println(string(m))
 }
 ```
 
