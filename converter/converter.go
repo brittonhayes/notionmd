@@ -6,6 +6,8 @@ import (
 	"github.com/gomarkdown/markdown/parser"
 )
 
+// TODO add support for chunking to [][]notion.Block to support 2000 block limit
+
 // Convert takes a markdown document as text, parses it into an AST node,
 // and iterates over the tree with the convertNode function, converting each
 // of the nodes to Notion blocks.
