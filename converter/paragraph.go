@@ -5,6 +5,10 @@ import (
 	"github.com/gomarkdown/markdown/ast"
 )
 
+// TODO add support for bold text
+// TODO add support for italic text
+// TODO add support for underline text
+
 func isParagraph(node ast.Node) bool {
 	_, ok := node.(*ast.Paragraph)
 	return ok

@@ -7,6 +7,8 @@ import (
 	"github.com/gomarkdown/markdown/ast"
 )
 
+// TODO add support for images
+
 func isLink(node ast.Node) bool {
 	_, ok := node.(*ast.Link)
 	return ok

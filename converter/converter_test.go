@@ -1,6 +1,8 @@
 package converter
 
 import (
+	"encoding/json"
+	"fmt"
 	"testing"
 
 	"github.com/dstotijn/go-notion"
@@ -115,4 +117,48 @@ lorem ipsum dolor sit amet.
 		assert.NoError(t, err)
 		assert.Equal(t, expected, result)
 	})
+}
+
+func ExampleConvert() {
+	markdownText := `# H1 Example
+
+- Item 1
+`
+
+	result, err := Convert(markdownText)
+	if err != nil {
+		panic(err)
+	}
+	m, _ := json.MarshalIndent(result, "", "  ")
+	fmt.Println(string(m))
+	// Output:
+	// [
+	//   {
+	//     "heading_1": {
+	//       "rich_text": [
+	//         {
+	//           "type": "text",
+	//           "plain_text": "H1 Example",
+	//           "text": {
+	//             "content": "H1 Example"
+	//           }
+	//         }
+	//       ],
+	//       "is_toggleable": false
+	//     }
+	//   },
+	//   {
+	//     "bulleted_list_item": {
+	//       "rich_text": [
+	//         {
+	//           "type": "text",
+	//           "plain_text": "Item 1",
+	//           "text": {
+	//             "content": "Item 1"
+	//           }
+	//         }
+	//       ]
+	//     }
+	//   }
+	// ]
 }
