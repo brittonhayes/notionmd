@@ -1,10 +1,14 @@
 package converter
 
 import (
-	"fmt"
+	"errors"
 
 	"github.com/dstotijn/go-notion"
 	"github.com/gomarkdown/markdown/ast"
+)
+
+var (
+	ErrUnsupportedListItemType = errors.New("unsupported list item type")
 )
 
 func isList(node ast.Node) bool {
@@ -54,7 +58,7 @@ func convertListItem(listItem ast.Node) (notion.Block, error) {
 
 	// Check if the list item contains text
 	if !isListItem(listItem) {
-		return nil, fmt.Errorf("unsupported list item type: %T", listItem)
+		return nil, ErrUnsupportedListItemType
 	}
 
 	// Extract the text content

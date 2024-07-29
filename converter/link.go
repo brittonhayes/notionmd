@@ -1,10 +1,14 @@
 package converter
 
 import (
-	"fmt"
+	"errors"
 
 	"github.com/dstotijn/go-notion"
 	"github.com/gomarkdown/markdown/ast"
+)
+
+var (
+	ErrExpectedLinkNode = errors.New("expected *ast.Link node, got nil")
 )
 
 // TODO add support for images
@@ -26,7 +30,7 @@ func extractTitle(node *ast.Link) string {
 // It takes a pointer to an ast.Link node and returns a Notion block and an error.
 func convertLink(node *ast.Link) (*notion.ParagraphBlock, error) {
 	if node == nil {
-		return nil, fmt.Errorf("expected *ast.Link node, got nil")
+		return nil, ErrExpectedLinkNode
 	}
 
 	richText, err := convertLinkToTextBlock(node)
@@ -43,7 +47,7 @@ func convertLink(node *ast.Link) (*notion.ParagraphBlock, error) {
 // It takes a pointer to an ast.Link node and returns a Notion text block and an error.
 func convertLinkToTextBlock(node *ast.Link) (notion.RichText, error) {
 	if node == nil {
-		return notion.RichText{}, fmt.Errorf("expected *ast.Link node, got nil")
+		return notion.RichText{}, ErrExpectedLinkNode
 	}
 
 	return notion.RichText{
