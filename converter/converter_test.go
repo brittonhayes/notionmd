@@ -120,17 +120,19 @@ lorem ipsum dolor sit amet.
 }
 
 func ExampleConvert() {
-	markdownText := `# H1 Example
+	markdown := `# H1 Example
 
 - Item 1
 `
 
-	result, err := Convert(markdownText)
+	blocks, err := Convert(markdown)
 	if err != nil {
 		panic(err)
 	}
-	m, _ := json.MarshalIndent(result, "", "  ")
-	fmt.Println(string(m))
+
+	result, _ := json.MarshalIndent(blocks, "", "  ")
+	fmt.Println(string(result))
+
 	// Output:
 	// [
 	//   {
