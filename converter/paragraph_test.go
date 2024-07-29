@@ -21,6 +21,7 @@ func TestIsParagraph(t *testing.T) {
 }
 
 func TestConvertParagraph(t *testing.T) {
+
 	t.Run("can convert simple paragraph", func(t *testing.T) {
 		input := "This is a simple paragraph."
 		expected := notion.ParagraphBlock{
@@ -33,7 +34,20 @@ func TestConvertParagraph(t *testing.T) {
 			},
 		}
 
-		result := testConvertParagraph(t, input)
+		// Convert the paragraph
+		result, err := convertParagraph(&ast.Paragraph{
+			Container: ast.Container{
+				Children: []ast.Node{
+					&ast.Leaf{
+						Content: []byte(input),
+						Literal: []byte(input),
+					},
+				},
+			},
+		})
+		// Assert no error occurred
+		assert.NoError(t, err)
+
 		assert.Len(t, result.RichText, 1)
 		assert.Equal(t, expected.RichText[0].PlainText, result.RichText[0].PlainText)
 		assert.Equal(t, expected.RichText[0].Text.Content, result.RichText[0].Text.Content)
@@ -41,11 +55,20 @@ func TestConvertParagraph(t *testing.T) {
 
 	t.Run("handles empty paragraph", func(t *testing.T) {
 		input := ""
-		expected := &notion.ParagraphBlock{}
-
-		result := testConvertParagraph(t, input)
-		assert.IsType(t, expected, result)
-		assert.False(t, result.HasChildren())
+		// Convert the paragraph
+		result, err := convertParagraph(&ast.Paragraph{
+			Container: ast.Container{
+				Children: []ast.Node{
+					&ast.Leaf{
+						Content: []byte(input),
+						Literal: []byte(input),
+					},
+				},
+			},
+		})
+		// Assert no error occurred
+		assert.NoError(t, err)
+		assert.Nil(t, result)
 	})
 
 	t.Run("can convert paragraph with multiple lines of text", func(t *testing.T) {
@@ -60,32 +83,23 @@ func TestConvertParagraph(t *testing.T) {
 			},
 		}
 
-		result := testConvertParagraph(t, input)
+		// Convert the paragraph
+		result, err := convertParagraph(&ast.Paragraph{
+			Container: ast.Container{
+				Children: []ast.Node{
+					&ast.Leaf{
+						Content: []byte(input),
+						Literal: []byte(input),
+					},
+				},
+			},
+		})
+		// Assert no error occurred
+		assert.NoError(t, err)
+
 		// Assert the content is correct
 		assert.Len(t, result.RichText, 1)
 		assert.Equal(t, expected.RichText[0].PlainText, result.RichText[0].PlainText)
 		assert.Equal(t, expected.RichText[0].Text.Content, result.RichText[0].Text.Content)
 	})
-}
-
-func testConvertParagraph(t *testing.T, input string) *notion.ParagraphBlock {
-	// Convert the paragraph
-	result, err := convertParagraph(&ast.Paragraph{
-		Container: ast.Container{
-			Children: []ast.Node{
-				&ast.Leaf{
-					Content: []byte(input),
-					Literal: []byte(input),
-				},
-			},
-		},
-	})
-
-	// Assert no error occurred
-	assert.NoError(t, err)
-
-	// Assert the result is of type ParagraphBlock
-	assert.IsType(t, &notion.ParagraphBlock{}, result, "Result should be of type ParagraphBlock")
-
-	return result
 }
