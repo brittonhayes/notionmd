@@ -1,5 +1,4 @@
 # NotionMD
-
 Seamlessly Convert Markdown to Notion Blocks
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/brittonhayes/notionmd.svg)](https://pkg.go.dev/github.com/brittonhayes/notionmd)
@@ -34,6 +33,7 @@ package main
 
 import (
     "encoding/json"
+    "log"
     "fmt"
     "github.com/brittonhayes/notionmd"
 )
@@ -46,7 +46,7 @@ func main() {
 
     blocks, err := notionmd.Convert(markdown)
     if err != nil {
-        panic(err)
+       log.Fatal(err) 
     }
 
     // Print the resulting Notion blocks
@@ -103,6 +103,37 @@ func main() {
 ]
 ```
 </details>
+
+### Advanced Usage: Converting a Markdown File to Notion Blocks
+
+Here's an example of how to read a Markdown file, parse it into a string, and then convert it into Notion blocks:
+
+```go
+package main
+
+import (
+    "os"
+    "log"
+    "github.com/brittonhayes/notionmd"
+)
+
+func main() {
+    // Read the Markdown file
+    markdown, err := os.ReadFile("example.md")
+    if err != nil {
+        log.Fatalf("Error reading Markdown file: %v", err)
+    }
+
+    // Convert the Markdown content to a string
+    content := string(markdown)
+
+    // Convert the Markdown string to Notion blocks
+    blocks, err := notionmd.Convert(content)
+    if err != nil {
+        log.Fatalf("Error converting Markdown to Notion blocks: %v", err)
+    }
+}
+```
 
 ## 🧪 Testing
 
