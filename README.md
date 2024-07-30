@@ -129,8 +129,6 @@ NotionMD is open-source software licensed under the MIT License. See the [LICENS
 
 ## 🙏 Acknowledgements
 
-NotionMD stands on the shoulders of giants. We'd like to thank the following projects:
-
 - [go-notion](https://github.com/dstotijn/go-notion) for Notion API interactions
 - [gomarkdown](https://github.com/gomarkdown/gomarkdown) for Markdown parsing
 
