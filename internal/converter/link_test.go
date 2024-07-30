@@ -126,7 +126,7 @@ func TestConvertLinkToTextBlock(t *testing.T) {
 			},
 		}
 
-		expected := notion.RichText{
+		expected := []notion.RichText{{
 			Type: notion.RichTextTypeText,
 			Text: &notion.Text{
 				Content: "Example",
@@ -135,7 +135,7 @@ func TestConvertLinkToTextBlock(t *testing.T) {
 				},
 			},
 			PlainText: "Example",
-		}
+		}}
 
 		result, err := convertLinkToTextBlock(node)
 		assert.NoError(t, err)

@@ -3,6 +3,7 @@ package converter
 import (
 	"errors"
 
+	"github.com/brittonhayes/notionmd/internal/chunk"
 	"github.com/dstotijn/go-notion"
 	"github.com/gomarkdown/markdown/ast"
 )
@@ -39,25 +40,16 @@ func convertLink(node *ast.Link) (*notion.ParagraphBlock, error) {
 	}
 
 	return &notion.ParagraphBlock{
-		RichText: []notion.RichText{richText},
+		RichText: richText,
 	}, nil
 }
 
 // convertLinkToTextBlock converts an AST link node to a Notion text block.
 // It takes a pointer to an ast.Link node and returns a Notion text block and an error.
-func convertLinkToTextBlock(node *ast.Link) (notion.RichText, error) {
+func convertLinkToTextBlock(node *ast.Link) ([]notion.RichText, error) {
 	if node == nil {
-		return notion.RichText{}, ErrExpectedLinkNode
+		return nil, ErrExpectedLinkNode
 	}
 
-	return notion.RichText{
-		Type: notion.RichTextTypeText,
-		Text: &notion.Text{
-			Content: extractTitle(node),
-			Link: &notion.Link{
-				URL: extractURL(node),
-			},
-		},
-		PlainText: extractTitle(node),
-	}, nil
+	return chunk.RichTextWithLink(extractTitle(node), extractURL(node)), nil
 }

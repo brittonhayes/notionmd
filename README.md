@@ -28,7 +28,7 @@ You can convert Markdown content to Notion blocks using the `Convert` function. 
 package main
 
 import (
-    "github.com/brittonhayes/notionmd/converter"
+    "github.com/brittonhayes/notionmd"
 )
 
 func main() {
@@ -36,7 +36,7 @@ func main() {
 # H1 Example
 - Item 1`
 
-    blocks, err := converter.Convert(markdown)
+    blocks, err := notionmd.Convert(markdown)
     if err != nil {
         panic(err)
     }
@@ -89,7 +89,7 @@ func main() {
 To run the tests, use the following command:
 
 ```sh
-go test ./...-v -cover
+go test ./... -v -cover
 ```
 
 ## Contributing

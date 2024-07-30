@@ -1,6 +1,7 @@
 package converter
 
 import (
+	"github.com/brittonhayes/notionmd/internal/chunk"
 	"github.com/dstotijn/go-notion"
 	"github.com/gomarkdown/markdown/ast"
 )
@@ -27,43 +28,19 @@ func convertHeading(node *ast.Heading) (notion.Block, error) {
 
 	if node.Level == 1 {
 		return notion.Heading1Block{
-			RichText: []notion.RichText{
-				{
-					Type: notion.RichTextTypeText,
-					Text: &notion.Text{
-						Content: string(node.Children[0].AsLeaf().Literal),
-					},
-					PlainText: string(node.Children[0].AsLeaf().Literal),
-				},
-			},
+			RichText: chunk.RichText(string(node.Children[0].AsLeaf().Literal)),
 		}, nil
 	}
 
 	if node.Level == 2 {
 		return notion.Heading2Block{
-			RichText: []notion.RichText{
-				{
-					Type: notion.RichTextTypeText,
-					Text: &notion.Text{
-						Content: string(node.Children[0].AsLeaf().Literal),
-					},
-					PlainText: string(node.Children[0].AsLeaf().Literal),
-				},
-			},
+			RichText: chunk.RichText(string(node.Children[0].AsLeaf().Literal)),
 		}, nil
 	}
 
 	if node.Level == 3 {
 		return notion.Heading3Block{
-			RichText: []notion.RichText{
-				{
-					Type: notion.RichTextTypeText,
-					Text: &notion.Text{
-						Content: string(node.Children[0].AsLeaf().Literal),
-					},
-					PlainText: string(node.Children[0].AsLeaf().Literal),
-				},
-			},
+			RichText: chunk.RichText(string(node.Children[0].AsLeaf().Literal)),
 		}, nil
 	}
 

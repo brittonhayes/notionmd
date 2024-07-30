@@ -6,8 +6,6 @@ import (
 	"github.com/gomarkdown/markdown/parser"
 )
 
-// TODO add support for chunking to [][]notion.Block to support 2000 block limit
-
 // Convert takes a markdown document as text, parses it into an AST node,
 // and iterates over the tree with the convertNode function, converting each
 // of the nodes to Notion blocks.
@@ -54,19 +52,6 @@ func Convert(markdown string) ([]notion.Block, error) {
 
 			return ast.SkipChildren
 		}
-
-		// if isLink(node) {
-		// 	block, err := convertLink(node.(*ast.Link))
-		// 	if err != nil {
-		// 		return ast.Terminate
-		// 	}
-
-		// 	if block != nil {
-		// 		blocks = append(blocks, block)
-		// 	}
-
-		// 	return ast.SkipChildren
-		// }
 
 		return ast.GoToNext
 	})

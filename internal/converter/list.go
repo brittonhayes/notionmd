@@ -3,6 +3,7 @@ package converter
 import (
 	"errors"
 
+	"github.com/brittonhayes/notionmd/internal/chunk"
 	"github.com/dstotijn/go-notion"
 	"github.com/gomarkdown/markdown/ast"
 )
@@ -66,15 +67,7 @@ func convertListItem(listItem ast.Node) (notion.Block, error) {
 
 	// Create a notion.Text object with the extracted text
 	richText := notion.BulletedListItemBlock{
-		RichText: []notion.RichText{
-			{
-				Type: notion.RichTextTypeText,
-				Text: &notion.Text{
-					Content: text,
-				},
-				PlainText: text,
-			},
-		},
+		RichText: chunk.RichText(text),
 	}
 
 	return richText, nil

@@ -1,6 +1,7 @@
 package converter
 
 import (
+	"github.com/brittonhayes/notionmd/internal/chunk"
 	"github.com/dstotijn/go-notion"
 	"github.com/gomarkdown/markdown/ast"
 )
@@ -30,20 +31,14 @@ func convertParagraph(node *ast.Paragraph) (*notion.ParagraphBlock, error) {
 				return nil, err
 			}
 
-			if (linkBlock != notion.RichText{}) {
-				blocks = append(blocks, linkBlock)
+			if linkBlock != nil {
+				blocks = append(blocks, linkBlock...)
 			}
 
 		} else {
 			content := string(child.AsLeaf().Literal)
 			if content != "" {
-				blocks = append(blocks, notion.RichText{
-					Type: notion.RichTextTypeText,
-					Text: &notion.Text{
-						Content: string(child.AsLeaf().Literal),
-					},
-					PlainText: string(child.AsLeaf().Literal),
-				})
+				blocks = append(blocks, chunk.RichText(content)...)
 			}
 		}
 	}
