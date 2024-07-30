@@ -137,7 +137,7 @@ func main() {
 
 ## 🧪 Testing
 
-Ensure the reliability of NotionMD by running the test suite:
+Ensure the reliability of NotionMD by running the test suite
 
 ```sh
 go test ./... -v -cover
