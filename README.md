@@ -104,17 +104,20 @@ func main() {
 ```
 </details>
 
-### Advanced Usage: Converting a Markdown File to Notion Blocks
+### Creating a Notion Page from Markdown
 
-Here's an example of how to read a Markdown file, parse it into a string, and then convert it into Notion blocks:
+This example demonstrates how to create a Notion page using the blocks parsed from a Markdown document
 
 ```go
 package main
 
 import (
-    "os"
+    "context"
     "log"
+    "os"
+
     "github.com/brittonhayes/notionmd"
+    "github.com/dstotijn/go-notion"
 )
 
 func main() {
@@ -124,20 +127,43 @@ func main() {
         log.Fatalf("Error reading Markdown file: %v", err)
     }
 
-    // Convert the Markdown content to a string
-    content := string(markdown)
-
-    // Convert the Markdown string to Notion blocks
-    blocks, err := notionmd.Convert(content)
+    // Convert the Markdown content to Notion blocks
+    blocks, err := notionmd.Convert(string(markdown))
     if err != nil {
         log.Fatalf("Error converting Markdown to Notion blocks: %v", err)
     }
+
+    // Initialize the Notion client
+    client := notion.NewClient(os.Getenv("NOTION_API_KEY"))
+
+    // Create a new page in Notion
+    parentPageID := "your-parent-page-id" // Replace with your actual parent page ID
+    newPage, err := client.CreatePage(context.Background(), notion.CreatePageParams{
+        ParentType: notion.ParentTypePage,
+        ParentID:   parentPageID,
+        Title: []notion.RichText{
+            {
+                Text: &notion.Text{
+                    Content: "Markdown to Notion Example",
+                },
+            },
+        },
+        Children: blocks,
+    })
+    if err != nil {
+        log.Fatalf("Error creating Notion page: %v", err)
+    }
+
+    log.Printf("Successfully created Notion page with ID: %s", newPage.ID)
 }
 ```
 
+> [!NOTE]  
+>  Make sure to set the `NOTION_API_KEY` environment variable with your Notion API key and replace `"your-parent-page-id"` with the actual ID of the parent page where you want to create the new page.
+
 ## 🧪 Testing
 
-Ensure the reliability of NotionMD by running the test suite
+Ensure the reliability of NotionMD by running the test suite:
 
 ```sh
 go test ./... -v -cover
