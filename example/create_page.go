@@ -26,7 +26,7 @@ func main() {
 	client := notion.NewClient(os.Getenv("NOTION_API_KEY"))
 
 	// Create a new page in Notion
-	parentPageID := "page-id" // Replace with your actual parent page ID
+	parentPageID := os.Getenv("PAGE_ID")
 	newPage, err := client.CreatePage(context.Background(), notion.CreatePageParams{
 		ParentType: notion.ParentTypePage,
 		ParentID:   parentPageID,

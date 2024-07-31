@@ -24,7 +24,7 @@ func TestConvertParagraph(t *testing.T) {
 
 	t.Run("can convert simple paragraph", func(t *testing.T) {
 		input := "This is a simple paragraph."
-		expected := notion.ParagraphBlock{
+		expected := &notion.ParagraphBlock{
 			RichText: []notion.RichText{
 				{
 					Type:      notion.RichTextTypeText,
@@ -46,9 +46,7 @@ func TestConvertParagraph(t *testing.T) {
 			},
 		})
 
-		assert.Len(t, result.RichText, 1)
-		assert.Equal(t, expected.RichText[0].PlainText, result.RichText[0].PlainText)
-		assert.Equal(t, expected.RichText[0].Text.Content, result.RichText[0].Text.Content)
+		assert.Equal(t, expected, result)
 	})
 
 	t.Run("handles empty paragraph", func(t *testing.T) {

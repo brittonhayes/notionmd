@@ -4,6 +4,7 @@ This is an example page created from a markdown file using the [NotionMD](https:
 
 - Convert Markdown easily
 - Integrate with Notion seamlessly
+- **Some bold text**
 
 *Hello*
 

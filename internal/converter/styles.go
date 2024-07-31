@@ -28,6 +28,10 @@ func convertStyledTextToBlock(node ast.Node) []notion.RichText {
 
 	var blocks []notion.RichText
 	for _, child := range node.GetChildren() {
+		if child.AsLeaf() == nil {
+			continue
+		}
+
 		content := string(child.AsLeaf().Literal)
 		blocks = append(blocks, chunk.RichText(content, &annotations)...)
 	}

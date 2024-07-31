@@ -24,6 +24,10 @@ func Convert(markdown string) ([]notion.Block, error) {
 			return ast.GoToNext
 		}
 
+		if isImage(node) {
+			return ast.SkipChildren
+		}
+
 		if isHeading(node) {
 			block := convertHeading(node.(*ast.Heading))
 			blocks = append(blocks, block)
@@ -61,8 +65,11 @@ func Convert(markdown string) ([]notion.Block, error) {
 }
 
 func convertChildNodesToRichText(node ast.Node) []notion.RichText {
-	var blocks []notion.RichText
+	if node == nil {
+		return nil
+	}
 
+	var blocks []notion.RichText
 	for _, child := range node.GetChildren() {
 		if isLink(child) {
 			linkBlock := convertLinkToTextBlock(child.(*ast.Link))
@@ -76,6 +83,11 @@ func convertChildNodesToRichText(node ast.Node) []notion.RichText {
 				blocks = append(blocks, styledBlock...)
 			}
 		} else {
+			value := child.AsLeaf()
+			if value == nil {
+				continue
+			}
+
 			content := string(child.AsLeaf().Literal)
 			if content != "" {
 				blocks = append(blocks, chunk.RichText(content, nil)...)
