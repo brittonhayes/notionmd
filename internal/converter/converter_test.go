@@ -3,11 +3,33 @@ package converter
 import (
 	"encoding/json"
 	"fmt"
+	"os"
 	"testing"
 
 	"github.com/dstotijn/go-notion"
 	"github.com/stretchr/testify/assert"
 )
+
+func TestMarkdownConverter_fixtures(t *testing.T) {
+	basePath := "../../fixtures/"
+	files, err := os.ReadDir(basePath)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	t.Run("can convert fixtures to notion blocks without failing", func(t *testing.T) {
+		for _, file := range files {
+			fixture, err := os.ReadFile(basePath + file.Name())
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			result, err := Convert(string(fixture))
+			assert.NoError(t, err)
+			assert.NotNil(t, result)
+		}
+	})
+}
 
 func TestMarkdownConverter(t *testing.T) {
 
