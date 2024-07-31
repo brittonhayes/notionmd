@@ -44,12 +44,43 @@ func convertList(node *ast.List) ([]notion.Block, error) {
 	return items, nil
 }
 
-func listItemContent(node ast.Node) string {
+func listItemContent(node ast.Node) []notion.RichText {
 	if node == nil {
-		return ""
+		return nil
 	}
 
-	return string(node.AsContainer().GetChildren()[0].AsContainer().GetChildren()[0].AsLeaf().Literal)
+	var richText []notion.RichText
+	ast.WalkFunc(node, func(n ast.Node, entering bool) ast.WalkStatus {
+		if !entering {
+			return ast.GoToNext
+		}
+
+		if isLink(n) {
+			linkBlock, err := convertLinkToTextBlock(n.(*ast.Link))
+			if err == nil && linkBlock != nil {
+				richText = append(richText, linkBlock...)
+			}
+			return ast.SkipChildren
+		}
+
+		if isStyledText(n) {
+			styledTextBlock := convertStyledTextToBlock(n)
+			if styledTextBlock != nil {
+				richText = append(richText, styledTextBlock...)
+			}
+			return ast.SkipChildren
+		}
+
+		content := string(node.AsContainer().GetChildren()[0].AsContainer().GetChildren()[0].AsLeaf().Literal)
+		if content != "" {
+			richText = append(richText, chunk.RichText(content, nil)...)
+			return ast.SkipChildren
+		}
+
+		return ast.GoToNext
+	})
+
+	return richText
 }
 
 func convertListItem(listItem ast.Node) (notion.Block, error) {
@@ -63,12 +94,16 @@ func convertListItem(listItem ast.Node) (notion.Block, error) {
 	}
 
 	// Extract the text content
-	text := listItemContent(listItem)
+	content := listItemContent(listItem)
 
-	// Create a notion.Text object with the extracted text
-	richText := notion.BulletedListItemBlock{
-		RichText: chunk.RichText(text),
+	// add support for ordered lists
+	if listItem.(*ast.ListItem).ListFlags&ast.ListTypeOrdered != 0 {
+		return notion.NumberedListItemBlock{
+			RichText: content,
+		}, nil
 	}
 
-	return richText, nil
+	return notion.BulletedListItemBlock{
+		RichText: content,
+	}, nil
 }

@@ -27,7 +27,7 @@ func Blocks(blocks []notion.Block) [][]notion.Block {
 }
 
 // RichText builds a new rich text block every 2000 characters of the provided string content.
-func RichText(content string) []notion.RichText {
+func RichText(content string, annotations *notion.Annotations) []notion.RichText {
 	var blocks []notion.RichText
 
 	if len(content) <= CharacterLimit {
@@ -36,7 +36,8 @@ func RichText(content string) []notion.RichText {
 			Text: &notion.Text{
 				Content: content,
 			},
-			PlainText: content,
+			PlainText:   content,
+			Annotations: annotations,
 		}
 
 		blocks = append(blocks, richText)
@@ -53,7 +54,8 @@ func RichText(content string) []notion.RichText {
 				Text: &notion.Text{
 					Content: chunk,
 				},
-				PlainText: chunk,
+				PlainText:   chunk,
+				Annotations: annotations,
 			}
 
 			blocks = append(blocks, richText)

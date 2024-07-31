@@ -126,11 +126,21 @@ func TestListItemContent(t *testing.T) {
 		}
 
 		content := listItemContent(listItemNode)
-		assert.Equal(t, "Item 1", content)
+		expect := []notion.RichText{
+			{
+				Type:      notion.RichTextTypeText,
+				PlainText: "Item 1",
+				Text: &notion.Text{
+					Content: "Item 1",
+				},
+			},
+		}
+
+		assert.Equal(t, expect, content)
 	})
 
 	t.Run("handles nil list item content", func(t *testing.T) {
 		content := listItemContent(nil)
-		assert.Equal(t, "", content, "Expected listItemContent to return an empty string for nil list item")
+		assert.Nil(t, content)
 	})
 }

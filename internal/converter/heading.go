@@ -19,7 +19,7 @@ func isHeading(node ast.Node) bool {
 //
 // It takes a pointer to an ast.Heading node as input and returns a Notion block and an error.
 // The function extracts the text content from the heading node and creates a Notion block
-// based on the heading level. If the heading level is not 1, 2, or 3, it treats the node as a paragraph.
+// based on the heading level. If the heading level is not 1, 2, or 3, it treats the node as an h3.
 // The function returns the corresponding Notion block and an error if any.
 func convertHeading(node *ast.Heading) (notion.Block, error) {
 	if node.GetChildren() == nil {
@@ -28,21 +28,17 @@ func convertHeading(node *ast.Heading) (notion.Block, error) {
 
 	if node.Level == 1 {
 		return notion.Heading1Block{
-			RichText: chunk.RichText(string(node.Children[0].AsLeaf().Literal)),
+			RichText: chunk.RichText(string(node.Children[0].AsLeaf().Literal), nil),
 		}, nil
 	}
 
 	if node.Level == 2 {
 		return notion.Heading2Block{
-			RichText: chunk.RichText(string(node.Children[0].AsLeaf().Literal)),
+			RichText: chunk.RichText(string(node.Children[0].AsLeaf().Literal), nil),
 		}, nil
 	}
 
-	if node.Level == 3 {
-		return notion.Heading3Block{
-			RichText: chunk.RichText(string(node.Children[0].AsLeaf().Literal)),
-		}, nil
-	}
-
-	return nil, nil
+	return notion.Heading3Block{
+		RichText: chunk.RichText(string(node.Children[0].AsLeaf().Literal), nil),
+	}, nil
 }
