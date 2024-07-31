@@ -35,7 +35,7 @@ func TestConvertParagraph(t *testing.T) {
 		}
 
 		// Convert the paragraph
-		result, err := convertParagraph(&ast.Paragraph{
+		result := convertParagraph(&ast.Paragraph{
 			Container: ast.Container{
 				Children: []ast.Node{
 					&ast.Leaf{
@@ -45,8 +45,6 @@ func TestConvertParagraph(t *testing.T) {
 				},
 			},
 		})
-		// Assert no error occurred
-		assert.NoError(t, err)
 
 		assert.Len(t, result.RichText, 1)
 		assert.Equal(t, expected.RichText[0].PlainText, result.RichText[0].PlainText)
@@ -56,7 +54,7 @@ func TestConvertParagraph(t *testing.T) {
 	t.Run("handles empty paragraph", func(t *testing.T) {
 		input := ""
 		// Convert the paragraph
-		result, err := convertParagraph(&ast.Paragraph{
+		result := convertParagraph(&ast.Paragraph{
 			Container: ast.Container{
 				Children: []ast.Node{
 					&ast.Leaf{
@@ -67,7 +65,6 @@ func TestConvertParagraph(t *testing.T) {
 			},
 		})
 		// Assert no error occurred
-		assert.NoError(t, err)
 		assert.Nil(t, result)
 	})
 
@@ -84,7 +81,7 @@ func TestConvertParagraph(t *testing.T) {
 		}
 
 		// Convert the paragraph
-		result, err := convertParagraph(&ast.Paragraph{
+		result := convertParagraph(&ast.Paragraph{
 			Container: ast.Container{
 				Children: []ast.Node{
 					&ast.Leaf{
@@ -94,8 +91,6 @@ func TestConvertParagraph(t *testing.T) {
 				},
 			},
 		})
-		// Assert no error occurred
-		assert.NoError(t, err)
 
 		// Assert the content is correct
 		assert.Len(t, result.RichText, 1)

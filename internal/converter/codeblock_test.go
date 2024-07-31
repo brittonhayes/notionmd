@@ -29,22 +29,19 @@ func TestConvertCodeBlock(t *testing.T) {
 			Language: &language,
 		}
 
-		codeBlock, err := convertCodeBlock(codeBlockNode)
-		assert.NoError(t, err, "Expected convertCodeBlock to not return an error")
+		codeBlock := convertCodeBlock(codeBlockNode)
 		assert.Equal(t, expected, *codeBlock, "Expected code block to match")
 	})
 
 	t.Run("handles nil code block", func(t *testing.T) {
-		codeBlock, err := convertCodeBlock(nil)
-		assert.NoError(t, err, "Expected convertCodeBlock to not return an error for nil code block")
+		codeBlock := convertCodeBlock(nil)
 		assert.Nil(t, codeBlock, "Expected code block to be nil for nil code block")
 	})
 
 	t.Run("handles empty code block", func(t *testing.T) {
 		codeBlockNode := &ast.CodeBlock{}
 
-		codeBlock, err := convertCodeBlock(codeBlockNode)
-		assert.NoError(t, err, "Expected convertCodeBlock to not return an error")
+		codeBlock := convertCodeBlock(codeBlockNode)
 		assert.Nil(t, codeBlock, "Expected code block to be nil for empty code block")
 	})
 
@@ -65,8 +62,7 @@ func TestConvertCodeBlock(t *testing.T) {
 			},
 		}
 
-		codeBlock, err := convertCodeBlock(codeBlockNode)
-		assert.NoError(t, err, "Expected convertCodeBlock to not return an error")
-		assert.Equal(t, expected, *codeBlock, "Expected code block to match")
+		codeBlock := convertCodeBlock(codeBlockNode)
+		assert.Equal(t, expected, *codeBlock)
 	})
 }

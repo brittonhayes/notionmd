@@ -22,14 +22,14 @@ func extractLanguage(node *ast.CodeBlock) string {
 
 // convertCodeBlock converts an AST code block node to a Notion code block.
 // It takes a pointer to an ast.CodeBlock node and returns a notion.CodeBlock and an error.
-func convertCodeBlock(node *ast.CodeBlock) (*notion.CodeBlock, error) {
+func convertCodeBlock(node *ast.CodeBlock) *notion.CodeBlock {
 	if node == nil || node.Literal == nil {
-		return nil, nil
+		return nil
 	}
 
 	content := string(node.Literal)
 	if content == "" {
-		return nil, nil
+		return nil
 	}
 
 	result := &notion.CodeBlock{
@@ -41,5 +41,5 @@ func convertCodeBlock(node *ast.CodeBlock) (*notion.CodeBlock, error) {
 		result.Language = &language
 	}
 
-	return result, nil
+	return result
 }

@@ -25,28 +25,19 @@ func Convert(markdown string) ([]notion.Block, error) {
 		}
 
 		if isHeading(node) {
-			block, err := convertHeading(node.(*ast.Heading))
-			if err != nil {
-				return ast.Terminate
-			}
+			block := convertHeading(node.(*ast.Heading))
 			blocks = append(blocks, block)
 			return ast.SkipChildren
 		}
 
 		if isList(node) {
-			list, err := convertList(node.(*ast.List))
-			if err != nil {
-				return ast.Terminate
-			}
+			list := convertList(node.(*ast.List))
 			blocks = append(blocks, list...)
 			return ast.SkipChildren
 		}
 
 		if isParagraph(node) {
-			block, err := convertParagraph(node.(*ast.Paragraph))
-			if err != nil {
-				return ast.Terminate
-			}
+			block := convertParagraph(node.(*ast.Paragraph))
 			if block != nil {
 				blocks = append(blocks, block)
 			}
@@ -55,10 +46,7 @@ func Convert(markdown string) ([]notion.Block, error) {
 		}
 
 		if isCodeBlock(node) {
-			codeBlock, err := convertCodeBlock(node.(*ast.CodeBlock))
-			if err != nil {
-				return ast.Terminate
-			}
+			codeBlock := convertCodeBlock(node.(*ast.CodeBlock))
 			if codeBlock != nil {
 				blocks = append(blocks, codeBlock)
 			}
@@ -72,16 +60,12 @@ func Convert(markdown string) ([]notion.Block, error) {
 	return blocks, nil
 }
 
-func convertChildNodesToRichText(node ast.Node) ([]notion.RichText, error) {
+func convertChildNodesToRichText(node ast.Node) []notion.RichText {
 	var blocks []notion.RichText
 
 	for _, child := range node.GetChildren() {
 		if isLink(child) {
-			linkBlock, err := convertLinkToTextBlock(child.(*ast.Link))
-			if err != nil {
-				return nil, err
-			}
-
+			linkBlock := convertLinkToTextBlock(child.(*ast.Link))
 			if linkBlock != nil {
 				blocks = append(blocks, linkBlock...)
 			}
@@ -100,8 +84,8 @@ func convertChildNodesToRichText(node ast.Node) ([]notion.RichText, error) {
 	}
 
 	if blocks == nil {
-		return nil, nil
+		return nil
 	}
 
-	return blocks, nil
+	return blocks
 }

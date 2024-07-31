@@ -21,24 +21,24 @@ func isHeading(node ast.Node) bool {
 // The function extracts the text content from the heading node and creates a Notion block
 // based on the heading level. If the heading level is not 1, 2, or 3, it treats the node as an h3.
 // The function returns the corresponding Notion block and an error if any.
-func convertHeading(node *ast.Heading) (notion.Block, error) {
+func convertHeading(node *ast.Heading) notion.Block {
 	if node.GetChildren() == nil {
-		return nil, nil
+		return nil
 	}
 
 	if node.Level == 1 {
 		return notion.Heading1Block{
 			RichText: chunk.RichText(string(node.Children[0].AsLeaf().Literal), nil),
-		}, nil
+		}
 	}
 
 	if node.Level == 2 {
 		return notion.Heading2Block{
 			RichText: chunk.RichText(string(node.Children[0].AsLeaf().Literal), nil),
-		}, nil
+		}
 	}
 
 	return notion.Heading3Block{
 		RichText: chunk.RichText(string(node.Children[0].AsLeaf().Literal), nil),
-	}, nil
+	}
 }

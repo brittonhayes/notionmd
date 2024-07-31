@@ -45,8 +45,7 @@ func TestConvertHeading(t *testing.T) {
 			},
 		}
 
-		result, err := convertHeading(node)
-		assert.NoError(t, err)
+		result := convertHeading(node)
 		assertHeadingBlockEqual(t, expected, result)
 	})
 
@@ -74,8 +73,7 @@ func TestConvertHeading(t *testing.T) {
 			},
 		}
 
-		result, err := convertHeading(node)
-		assert.NoError(t, err)
+		result := convertHeading(node)
 		assertHeadingBlockEqual(t, expected, result)
 	})
 
@@ -103,8 +101,7 @@ func TestConvertHeading(t *testing.T) {
 			},
 		}
 
-		result, err := convertHeading(node)
-		assert.NoError(t, err)
+		result := convertHeading(node)
 		assertHeadingBlockEqual(t, expected, result)
 	})
 
@@ -132,8 +129,7 @@ func TestConvertHeading(t *testing.T) {
 			},
 		}
 
-		result, err := convertHeading(node)
-		assert.NoError(t, err)
+		result := convertHeading(node)
 		assertHeadingBlockEqual(t, expected, result)
 	})
 }

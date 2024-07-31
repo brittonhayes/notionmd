@@ -27,21 +27,18 @@ func isListItem(node ast.Node) bool {
 // It iterates over the list items and their children, extracting the text content
 // and creating a notion.RichText slice. The resulting notion.BulletedListItemBlock
 // contains the extracted text as rich text.
-func convertList(node *ast.List) ([]notion.Block, error) {
+func convertList(node *ast.List) []notion.Block {
 	if node == nil {
-		return nil, nil
+		return nil
 	}
 
 	var items []notion.Block
 	for _, listItem := range node.GetChildren() {
-		item, err := convertListItem(listItem)
-		if err != nil {
-			return nil, err
-		}
+		item := convertListItem(listItem)
 		items = append(items, item)
 	}
 
-	return items, nil
+	return items
 }
 
 func listItemContent(node ast.Node) []notion.RichText {
@@ -56,8 +53,8 @@ func listItemContent(node ast.Node) []notion.RichText {
 		}
 
 		if isLink(n) {
-			linkBlock, err := convertLinkToTextBlock(n.(*ast.Link))
-			if err == nil && linkBlock != nil {
+			linkBlock := convertLinkToTextBlock(n.(*ast.Link))
+			if linkBlock != nil {
 				richText = append(richText, linkBlock...)
 			}
 			return ast.SkipChildren
@@ -83,14 +80,14 @@ func listItemContent(node ast.Node) []notion.RichText {
 	return richText
 }
 
-func convertListItem(listItem ast.Node) (notion.Block, error) {
+func convertListItem(listItem ast.Node) notion.Block {
 	if listItem == nil {
-		return nil, nil
+		return nil
 	}
 
 	// Check if the list item contains text
 	if !isListItem(listItem) {
-		return nil, ErrUnsupportedListItemType
+		return nil
 	}
 
 	// Extract the text content
@@ -100,10 +97,10 @@ func convertListItem(listItem ast.Node) (notion.Block, error) {
 	if listItem.(*ast.ListItem).ListFlags&ast.ListTypeOrdered != 0 {
 		return notion.NumberedListItemBlock{
 			RichText: content,
-		}, nil
+		}
 	}
 
 	return notion.BulletedListItemBlock{
 		RichText: content,
-	}, nil
+	}
 }

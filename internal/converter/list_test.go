@@ -57,16 +57,14 @@ func TestConvertList(t *testing.T) {
 			},
 		}
 
-		blocks, err := convertList(listNode)
-		assert.NoError(t, err, "Expected convertList to not return an error")
+		blocks := convertList(listNode)
 		assert.Len(t, blocks, 2, "Expected convertList to return 1 block")
 	})
 
 	t.Run("handles empty list", func(t *testing.T) {
 		listNode := &ast.List{}
 
-		blocks, err := convertList(listNode)
-		assert.NoError(t, err, "Expected convertList to not return an error")
+		blocks := convertList(listNode)
 		assert.Empty(t, blocks, "Expected convertList to return no blocks")
 	})
 }
@@ -90,8 +88,7 @@ func TestConvertListItem(t *testing.T) {
 			},
 		}
 
-		block, err := convertListItem(listItem)
-		assert.NoError(t, err, "Expected convertListItem to not return an error")
+		block := convertListItem(listItem)
 
 		bulletedListItem, ok := block.(notion.BulletedListItemBlock)
 		assert.True(t, ok, "Expected convertListItem to return a notion.BulletedListItemBlock")
@@ -100,8 +97,7 @@ func TestConvertListItem(t *testing.T) {
 	})
 
 	t.Run("handles nil list item", func(t *testing.T) {
-		block, err := convertListItem(nil)
-		assert.NoError(t, err, "Expected convertListItem to not return an error for nil list item")
+		block := convertListItem(nil)
 		assert.Nil(t, block, "Expected block to be nil for nil list item")
 	})
 }
