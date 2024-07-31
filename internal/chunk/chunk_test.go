@@ -21,7 +21,7 @@ func TestRichText(t *testing.T) {
 			},
 		}
 
-		blocks := RichText(content)
+		blocks := RichText(content, nil)
 
 		assert.Equal(t, len(expectedBlocks), len(blocks), "Expected %d blocks, but got %d", len(expectedBlocks), len(blocks))
 
@@ -58,7 +58,7 @@ func TestRichText(t *testing.T) {
 			},
 		}
 
-		result := RichText(longContent)
+		result := RichText(longContent, nil)
 
 		assert.Equal(t, len(expectedBlocks), len(result), "Expected %d blocks, but got %d", len(expectedBlocks), len(result))
 		for i, block := range result {

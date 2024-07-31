@@ -34,11 +34,7 @@ func convertLink(node *ast.Link) (*notion.ParagraphBlock, error) {
 		return nil, ErrExpectedLinkNode
 	}
 
-	richText, err := convertLinkToTextBlock(node)
-	if err != nil {
-		return nil, err
-	}
-
+	richText := convertLinkToTextBlock(node)
 	return &notion.ParagraphBlock{
 		RichText: richText,
 	}, nil
@@ -46,10 +42,10 @@ func convertLink(node *ast.Link) (*notion.ParagraphBlock, error) {
 
 // convertLinkToTextBlock converts an AST link node to a Notion text block.
 // It takes a pointer to an ast.Link node and returns a Notion text block and an error.
-func convertLinkToTextBlock(node *ast.Link) ([]notion.RichText, error) {
+func convertLinkToTextBlock(node *ast.Link) []notion.RichText {
 	if node == nil {
-		return nil, ErrExpectedLinkNode
+		return nil
 	}
 
-	return chunk.RichTextWithLink(extractTitle(node), extractURL(node)), nil
+	return chunk.RichTextWithLink(extractTitle(node), extractURL(node))
 }

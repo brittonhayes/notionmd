@@ -127,25 +127,17 @@ func TestConvertLinkToTextBlock(t *testing.T) {
 		}
 
 		expected := []notion.RichText{{
-			Type: notion.RichTextTypeText,
+			Type:      notion.RichTextTypeText,
+			PlainText: "Example",
 			Text: &notion.Text{
 				Content: "Example",
 				Link: &notion.Link{
 					URL: "https://example.com",
 				},
 			},
-			PlainText: "Example",
 		}}
 
-		result, err := convertLinkToTextBlock(node)
-		assert.NoError(t, err)
+		result := convertLinkToTextBlock(node)
 		assert.Equal(t, expected, result)
-	})
-
-	t.Run("returns error for nil node", func(t *testing.T) {
-		var node *ast.Link
-
-		_, err := convertLinkToTextBlock(node)
-		assert.Error(t, err)
 	})
 }

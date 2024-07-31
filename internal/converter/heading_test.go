@@ -45,8 +45,7 @@ func TestConvertHeading(t *testing.T) {
 			},
 		}
 
-		result, err := convertHeading(node)
-		assert.NoError(t, err)
+		result := convertHeading(node)
 		assertHeadingBlockEqual(t, expected, result)
 	})
 
@@ -74,8 +73,7 @@ func TestConvertHeading(t *testing.T) {
 			},
 		}
 
-		result, err := convertHeading(node)
-		assert.NoError(t, err)
+		result := convertHeading(node)
 		assertHeadingBlockEqual(t, expected, result)
 	})
 
@@ -103,12 +101,11 @@ func TestConvertHeading(t *testing.T) {
 			},
 		}
 
-		result, err := convertHeading(node)
-		assert.NoError(t, err)
+		result := convertHeading(node)
 		assertHeadingBlockEqual(t, expected, result)
 	})
 
-	t.Run("can convert heading level 4", func(t *testing.T) {
+	t.Run("can fallback to h3 on heading level 4", func(t *testing.T) {
 		input := "Heading level 4"
 		node := &ast.Heading{
 			Level: 4,
@@ -122,9 +119,18 @@ func TestConvertHeading(t *testing.T) {
 			},
 		}
 
-		result, err := convertHeading(node)
-		assert.NoError(t, err)
-		assert.Nil(t, result)
+		expected := notion.Heading3Block{
+			RichText: []notion.RichText{
+				{
+					Type:      notion.RichTextTypeText,
+					Text:      &notion.Text{Content: input},
+					PlainText: input,
+				},
+			},
+		}
+
+		result := convertHeading(node)
+		assertHeadingBlockEqual(t, expected, result)
 	})
 }
 

@@ -35,7 +35,7 @@ func TestMarkdownConverter(t *testing.T) {
 
 ## H2 Example
 
-This is a paragraph
+*This is a paragraph*
 lorem ipsum dolor sit amet.
 `
 
@@ -62,8 +62,16 @@ lorem ipsum dolor sit amet.
 				RichText: []notion.RichText{
 					{
 						Type:      notion.RichTextTypeText,
-						Text:      &notion.Text{Content: "This is a paragraph\nlorem ipsum dolor sit amet."},
-						PlainText: "This is a paragraph\nlorem ipsum dolor sit amet.",
+						Text:      &notion.Text{Content: "This is a paragraph"},
+						PlainText: "This is a paragraph",
+						Annotations: &notion.Annotations{
+							Italic: true,
+						},
+					},
+					{
+						Type:      notion.RichTextTypeText,
+						Text:      &notion.Text{Content: "\nlorem ipsum dolor sit amet."},
+						PlainText: "\nlorem ipsum dolor sit amet.",
 					},
 				},
 			},
@@ -114,6 +122,47 @@ lorem ipsum dolor sit amet.
 
 		result, err := Convert(markdownText)
 
+		assert.NoError(t, err)
+		assert.Equal(t, expected, result)
+	})
+
+	t.Run("can convert lists with links and styling", func(t *testing.T) {
+		markdownText := `
+- [google](https://google.com)
+- *GitHub*
+`
+		expected := []notion.Block{
+			notion.BulletedListItemBlock{
+				RichText: []notion.RichText{
+					{
+						Type:      notion.RichTextTypeText,
+						PlainText: "google",
+						Text: &notion.Text{
+							Content: "google",
+							Link: &notion.Link{
+								URL: "https://google.com",
+							},
+						},
+					},
+				},
+			},
+			notion.BulletedListItemBlock{
+				RichText: []notion.RichText{
+					{
+						Type:      notion.RichTextTypeText,
+						PlainText: "GitHub",
+						Text: &notion.Text{
+							Content: "GitHub",
+						},
+						Annotations: &notion.Annotations{
+							Italic: true,
+						},
+					},
+				},
+			},
+		}
+
+		result, err := Convert(markdownText)
 		assert.NoError(t, err)
 		assert.Equal(t, expected, result)
 	})
