@@ -162,7 +162,7 @@ func main() {
 >  Make sure to set the `NOTION_API_KEY` environment variable with your Notion API key and replace `"your-parent-page-id"` with the actual ID of the parent page where you want to create the new page.
 
 
-## 📝 Supported Markdown Elements
+## 📝 Supported Markdown
 
 - ✅ Headings
 - ✅ Bold Text
