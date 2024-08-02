@@ -13,7 +13,7 @@ import (
 func Convert(markdown string) ([]notion.Block, error) {
 
 	// Parse the markdown document into an AST node
-	extensions := parser.CommonExtensions | parser.AutoHeadingIDs
+	extensions := parser.CommonExtensions
 	p := parser.NewWithExtensions(extensions)
 	document := p.Parse([]byte(markdown))
 
@@ -25,19 +25,25 @@ func Convert(markdown string) ([]notion.Block, error) {
 		}
 
 		if isImage(node) {
-			return ast.SkipChildren
-		}
-
-		if isHeading(node) {
-			block := convertHeading(node.(*ast.Heading))
-			blocks = append(blocks, block)
-			return ast.SkipChildren
+			return ast.GoToNext
 		}
 
 		if isList(node) {
 			list := convertList(node.(*ast.List))
 			blocks = append(blocks, list...)
 			return ast.SkipChildren
+		}
+
+		if isBlockquote(node) {
+			quote := convertBlockquote(node.(*ast.BlockQuote))
+			blocks = append(blocks, quote)
+			return ast.SkipChildren
+		}
+
+		if isHeading(node) {
+			block := convertHeading(node.(*ast.Heading))
+			blocks = append(blocks, block)
+			return ast.GoToNext
 		}
 
 		if isParagraph(node) {
@@ -76,22 +82,25 @@ func convertChildNodesToRichText(node ast.Node) []notion.RichText {
 			if linkBlock != nil {
 				blocks = append(blocks, linkBlock...)
 			}
+			continue
+		}
 
-		} else if isStyledText(child) {
+		if isStyledText(child) {
 			styledBlock := convertStyledTextToBlock(child)
 			if styledBlock != nil {
 				blocks = append(blocks, styledBlock...)
 			}
-		} else {
-			value := child.AsLeaf()
-			if value == nil {
-				continue
-			}
+			continue
+		}
 
-			content := string(child.AsLeaf().Literal)
-			if content != "" {
-				blocks = append(blocks, chunk.RichText(content, nil)...)
-			}
+		value := child.AsLeaf()
+		if value == nil {
+			continue
+		}
+
+		content := string(child.AsLeaf().Literal)
+		if content != "" {
+			blocks = append(blocks, chunk.RichText(content, nil)...)
 		}
 	}
 
