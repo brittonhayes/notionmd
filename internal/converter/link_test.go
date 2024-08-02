@@ -8,60 +8,18 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestConvertLink(t *testing.T) {
-	t.Run("can convert link", func(t *testing.T) {
-		node := &ast.Link{
-			Destination: []byte("https://example.com"),
-			Container: ast.Container{
-				Children: []ast.Node{
-					&ast.Leaf{
-						Literal: []byte("Example"),
-					},
-				},
-			},
-		}
-		expectedBlock := &notion.ParagraphBlock{
-			RichText: []notion.RichText{
-				{
-					Type: notion.RichTextTypeText,
-					Text: &notion.Text{
-						Content: "Example",
-						Link: &notion.Link{
-							URL: "https://example.com",
-						},
-					},
-					PlainText: "Example",
-				},
-			},
-		}
+func TestIsValidURL(t *testing.T) {
+	t.Run("can validate URL", func(t *testing.T) {
+		validURL := "https://example.com"
+		invalidURL := "example.com"
 
-		block, err := convertLink(node)
-		assert.NoError(t, err)
-		assert.Equal(t, expectedBlock, block)
+		assert.True(t, isValidURL(validURL))
+		assert.False(t, isValidURL(invalidURL))
 	})
 
-	t.Run("can convert link from markdown", func(t *testing.T) {
-		markdownText := `[Example](https://example.com)`
-		expected := []notion.Block{
-			&notion.ParagraphBlock{
-				RichText: []notion.RichText{
-					{
-						Type: notion.RichTextTypeText,
-						Text: &notion.Text{
-							Content: "Example",
-							Link: &notion.Link{
-								URL: "https://example.com",
-							},
-						},
-						PlainText: "Example",
-					},
-				},
-			},
-		}
-
-		result, err := Convert(markdownText)
-		assert.NoError(t, err)
-		assert.Equal(t, expected, result)
+	t.Run("throws err when given table of contents", func(t *testing.T) {
+		toc := "#internal-link"
+		assert.False(t, isValidURL(toc))
 	})
 }
 
