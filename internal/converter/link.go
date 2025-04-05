@@ -4,7 +4,7 @@ import (
 	"errors"
 	"net/url"
 
-	"github.com/brittonhayes/notionmd/internal/chunk"
+	"github.com/brittonhayes/notionmd/chunk"
 	"github.com/dstotijn/go-notion"
 	"github.com/gomarkdown/markdown/ast"
 )
