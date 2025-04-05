@@ -35,7 +35,9 @@ func convertList(node *ast.List) []notion.Block {
 	var items []notion.Block
 	for _, listItem := range node.GetChildren() {
 		item := convertListItem(listItem)
-		items = append(items, item)
+		if item != nil {
+			items = append(items, item)
+		}
 	}
 
 	return items
@@ -68,9 +70,11 @@ func listItemContent(node ast.Node) []notion.RichText {
 			return ast.SkipChildren
 		}
 
-		content := string(node.AsContainer().GetChildren()[0].AsContainer().GetChildren()[0].AsLeaf().Literal)
-		if content != "" {
-			richText = append(richText, chunk.RichText(content, nil)...)
+		if n.AsLeaf() != nil {
+			content := string(n.AsLeaf().Literal)
+			if content != "" {
+				richText = append(richText, chunk.RichText(content, nil)...)
+			}
 			return ast.SkipChildren
 		}
 
@@ -90,17 +94,39 @@ func convertListItem(listItem ast.Node) notion.Block {
 		return nil
 	}
 
-	// Extract the text content
-	content := listItemContent(listItem)
+	// Get the list item's children
+	children := listItem.GetChildren()
+	if len(children) == 0 {
+		return nil
+	}
 
-	// add support for ordered lists
+	// The first child should be a paragraph containing the text
+	paragraph, ok := children[0].(*ast.Paragraph)
+	if !ok {
+		return nil
+	}
+
+	// Extract the text content from the paragraph
+	content := listItemContent(paragraph)
+
+	// Process any remaining children (which could be nested lists)
+	var nestedBlocks []notion.Block
+	for _, child := range children[1:] {
+		if isList(child) {
+			nestedBlocks = append(nestedBlocks, convertList(child.(*ast.List))...)
+		}
+	}
+
+	// Create the appropriate list item block
 	if listItem.(*ast.ListItem).ListFlags&ast.ListTypeOrdered != 0 {
 		return notion.NumberedListItemBlock{
 			RichText: content,
+			Children: nestedBlocks,
 		}
 	}
 
 	return notion.BulletedListItemBlock{
 		RichText: content,
+		Children: nestedBlocks,
 	}
 }
