@@ -37,15 +37,22 @@ func extractTitle(node *ast.Link) string {
 
 // convertLinkToTextBlock converts an AST link node to a Notion text block.
 // It takes a pointer to an ast.Link node and returns a Notion text block.
+// If the URL is invalid (like a relative path), it falls back to returning just the text content
+// without the link to prevent empty list items that would fail Notion API validation.
 func convertLinkToTextBlock(node *ast.Link) []notion.RichText {
 	if node == nil {
 		return nil
 	}
 
-	ok := isValidURL(extractURL(node))
+	url := extractURL(node)
+	title := extractTitle(node)
+	
+	ok := isValidURL(url)
 	if !ok {
-		return nil
+		// Fallback to plain text when URL validation fails
+		// This prevents empty list items when using relative paths
+		return chunk.RichText(title, nil)
 	}
 
-	return chunk.RichTextWithLink(extractTitle(node), extractURL(node))
+	return chunk.RichTextWithLink(title, url)
 }

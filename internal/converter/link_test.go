@@ -98,4 +98,29 @@ func TestConvertLinkToTextBlock(t *testing.T) {
 		result := convertLinkToTextBlock(node)
 		assert.Equal(t, expected, result)
 	})
+
+	t.Run("falls back to plain text for relative paths", func(t *testing.T) {
+		node := &ast.Link{
+			Destination: []byte("./building.md"),
+			Container: ast.Container{
+				Children: []ast.Node{
+					&ast.Leaf{
+						Literal: []byte("Building"),
+					},
+				},
+			},
+		}
+
+		// Expect plain text without link for invalid URLs
+		expected := []notion.RichText{{
+			Type:      notion.RichTextTypeText,
+			PlainText: "Building",
+			Text: &notion.Text{
+				Content: "Building",
+			},
+		}}
+
+		result := convertLinkToTextBlock(node)
+		assert.Equal(t, expected, result)
+	})
 }
