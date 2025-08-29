@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.0](https://github.com/brittonhayes/notionmd/compare/v0.8.2...v0.9.0) (2025-08-29)
+
+
+### Features
+
+* add support for converting to json without go-notion requirement ([#17](https://github.com/brittonhayes/notionmd/issues/17)) ([15e29d7](https://github.com/brittonhayes/notionmd/commit/15e29d77508e400bd57830fe879c74ca2f781e00))
+
 ## [0.8.2](https://github.com/brittonhayes/notionmd/compare/v0.8.1...v0.8.2) (2025-08-29)
 
 
