@@ -1,24 +1,25 @@
 # NotionMD
+
 Seamlessly Convert Markdown to Notion Blocks
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/brittonhayes/notionmd.svg)](https://pkg.go.dev/github.com/brittonhayes/notionmd)
 [![Go Report Card](https://goreportcard.com/badge/github.com/brittonhayes/notionmd)](https://goreportcard.com/report/github.com/brittonhayes/notionmd)
 ![CI](https://github.com/brittonhayes/notionmd/actions/workflows/ci.yml/badge.svg)
 
-NotionMD is a powerful Go package that bridges the gap between Markdown and Notion. It allows you to effortlessly convert your Markdown content into Notion blocks, making it easier than ever to integrate your existing Markdown documents into your Notion workspace.
+NotionMD is a Go package that bridges the gap between Markdown and Notion. It converts your Markdown content into Notion blocks, making it simple to integrate existing Markdown documents into your Notion workspace.
 
-## 🌟 Key Features
+## Features
 
 - **Markdown to Notion**: Convert Markdown documents to Notion blocks with a single function call
 - **Rich Content Support**: Handles a variety of Markdown elements including headings, links, lists, and paragraphs
 - **Large Document Handling**: Efficiently processes large documents by breaking blocks into manageable chunks
 - **Easy Integration**: Designed to work seamlessly with Notion API clients
 
-## 🚀 Quick Start
+## Getting Started
 
 ### Installation
 
-Get started with NotionMD in your Go project:
+Add NotionMD to your Go project:
 
 ```sh
 go get github.com/brittonhayes/notionmd
@@ -106,7 +107,7 @@ func main() {
 
 ### Creating a Notion Page from Markdown
 
-This example demonstrates how to create a Notion page using the blocks parsed from a Markdown document
+This example demonstrates how to create a Notion page using the blocks parsed from a Markdown document:
 
 ```go
 package main
@@ -161,28 +162,27 @@ func main() {
 > [!NOTE]  
 >  Make sure to set the `NOTION_API_KEY` environment variable with your Notion API key and replace `"your-parent-page-id"` with the actual ID of the parent page where you want to create the new page.
 
+## Supported Markdown
 
-## 📝 Supported Markdown
+- Headings
+- Bold Text
+- Italic Text
+- Ordered Lists
+- Unordered Lists
+- Code Blocks
+- Links
 
-- ✅ Headings
-- ✅ Bold Text
-- ✅ Italic Text
-- ✅ Ordered Lists
-- ✅ Unordered Lists
-- ✅ Code Blocks
-- ✅ Links
+## Testing
 
-## 🧪 Testing
-
-Ensure the reliability of NotionMD by running the test suite:
+Run the test suite to ensure reliability:
 
 ```sh
 go test ./... -v -cover
 ```
 
-## 🤝 Contributing
+## Contributing
 
-We welcome contributions from the community! If you'd like to contribute:
+We welcome contributions from the community. If you'd like to contribute:
 
 1. Fork the repository
 2. Create a new branch for your feature or bug fix
@@ -191,19 +191,19 @@ We welcome contributions from the community! If you'd like to contribute:
 
 Please open an issue if you find a bug or have a feature request.
 
-## 📄 License
+## License
 
 NotionMD is open-source software licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgements
+## Acknowledgements
 
 - [go-notion](https://github.com/dstotijn/go-notion) for Notion API interactions
 - [gomarkdown](https://github.com/gomarkdown/gomarkdown) for Markdown parsing
 
-## 📚 Learn More
+## Learn More
 
 For detailed API documentation and advanced usage examples, visit our [Go Package Documentation](https://pkg.go.dev/github.com/brittonhayes/notionmd).
 
 ---
 
-Built with 🖤 by [Britton Hayes](https://github.com/brittonhayes) and contributors. If you find NotionMD useful, consider giving it a star on GitHub!
+Built by [Britton Hayes](https://github.com/brittonhayes) and contributors. If you find NotionMD useful, consider giving it a star on GitHub.
