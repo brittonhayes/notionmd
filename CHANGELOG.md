@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.1](https://github.com/brittonhayes/notionmd/compare/v0.8.0...v0.8.1) (2025-08-29)
+
+
+### Bug Fixes
+
+* handle relative path links in bullet lists gracefully to prevent empty nodes ([#12](https://github.com/brittonhayes/notionmd/issues/12)) ([#13](https://github.com/brittonhayes/notionmd/issues/13)) ([f6ec0eb](https://github.com/brittonhayes/notionmd/commit/f6ec0ebb3e177aa2f30615ea1a8c6d8ea0b930c5))
+
 ## [0.8.0](https://github.com/brittonhayes/notionmd/compare/v0.7.0...v0.8.0) (2025-04-05)
 
 
