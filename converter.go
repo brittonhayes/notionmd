@@ -11,3 +11,9 @@ import (
 func Convert(markdown string) ([]notion.Block, error) {
 	return converter.Convert(markdown)
 }
+
+// ConvertToJSON takes a markdown document and returns JSON-compatible maps.
+// This allows users to work with the data without external dependencies.
+func ConvertToJSON(markdown string) ([]map[string]any, error) {
+	return converter.ConvertToJSON(markdown)
+}
