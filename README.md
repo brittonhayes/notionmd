@@ -105,6 +105,77 @@ func main() {
 ```
 </details>
 
+## API Options
+
+NotionMD provides two simple conversion functions to meet different needs:
+
+### Option 1: Convert to Notion Blocks (requires go-notion library)
+
+```go
+blocks, err := notionmd.Convert(markdown)
+if err != nil {
+    log.Fatal(err)
+}
+
+// blocks is []notion.Block - use with go-notion library
+client := notion.NewClient(apiKey)
+// ... use blocks with the client
+```
+
+### Option 2: Convert to JSON (no external dependencies)
+
+If you want to work with the parsed blocks without external dependencies, you can get standard JSON maps:
+
+```go
+package main
+
+import (
+    "encoding/json"
+    "fmt"
+    "log"
+    "github.com/brittonhayes/notionmd"
+)
+
+func main() {
+    markdown := `# Hello World
+    
+    This is a paragraph with **bold** text.
+    
+    - List item 1
+    - List item 2`
+
+    // Convert to JSON maps (no external dependencies)
+    jsonBlocks, err := notionmd.ConvertToJSON(markdown)
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    // Work with the blocks as standard maps
+    // Each block has the type as a key (e.g., "heading_1", "paragraph", "quote")
+    for i, block := range jsonBlocks {
+        // Find the block type by checking which key exists
+        var blockType string
+        for key := range block {
+            if key != "type" { // Skip any "type" field if it exists
+                blockType = key
+                break
+            }
+        }
+        fmt.Printf("Block %d: %s\n", i+1, blockType)
+    }
+
+    // Convert to JSON string if needed
+    jsonData, _ := json.MarshalIndent(jsonBlocks, "", "  ")
+    fmt.Println(string(jsonData))
+}
+```
+
+This approach is useful when you want to:
+- Process the blocks without external library dependencies
+- Work with the data as standard JSON
+- Use your own Notion client implementation
+- Convert to other formats or APIs
+
 ### Creating a Notion Page from Markdown
 
 This example demonstrates how to create a Notion page using the blocks parsed from a Markdown document:
