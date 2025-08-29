@@ -188,6 +188,37 @@ lorem ipsum dolor sit amet.
 		assert.NoError(t, err)
 		assert.Equal(t, expected, result)
 	})
+	
+	t.Run("can handle bullet list with relative path links", func(t *testing.T) {
+		markdownText := `# How and Why Alpine Linux is used
+
+- [Building](./building.md)
+`
+		expected := []notion.Block{
+			notion.Heading1Block{
+				RichText: []notion.RichText{
+					{
+						Type:      notion.RichTextTypeText,
+						Text:      &notion.Text{Content: "How and Why Alpine Linux is used"},
+						PlainText: "How and Why Alpine Linux is used",
+					},
+				},
+			},
+			notion.BulletedListItemBlock{
+				RichText: []notion.RichText{
+					{
+						Type:      notion.RichTextTypeText,
+						Text:      &notion.Text{Content: "Building"},
+						PlainText: "Building",
+					},
+				},
+			},
+		}
+
+		result, err := Convert(markdownText)
+		assert.NoError(t, err)
+		assert.Equal(t, expected, result)
+	})
 }
 
 func ExampleConvert() {
