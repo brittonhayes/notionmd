@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.2](https://github.com/brittonhayes/notionmd/compare/v0.8.1...v0.8.2) (2025-08-29)
+
+
+### Bug Fixes
+
+* **docs:** Improve README voice and tone to match Notion style ([#15](https://github.com/brittonhayes/notionmd/issues/15)) ([9b85c1f](https://github.com/brittonhayes/notionmd/commit/9b85c1fd336d28cf3a2c7eab8386beadbeaba1cf))
+
 ## [0.8.1](https://github.com/brittonhayes/notionmd/compare/v0.8.0...v0.8.1) (2025-08-29)
 
 
